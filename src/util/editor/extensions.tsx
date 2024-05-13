@@ -15,6 +15,8 @@ import { useDatabaseStore } from "~/stores/database";
 import { getActiveQuery } from "../connection";
 import { tryParseParams } from "../helpers";
 import { validateQuery } from "../surrealql";
+import { EditorKeymap } from "~/types";
+import { vim } from "@replit/codemirror-vim";
 
 /**
  * The color scheme used within editors
@@ -185,6 +187,19 @@ export const surqlVariableCompletion = (): Extension => {
 	return surrealqlLanguage.data.of({
 		autocomplete: VARIABLE_SOURCE
 	});
+};
+
+export const userEditorKeymap = (keymap: EditorKeymap): Extension => {
+	switch (keymap) {
+		case "vim": {
+			return vim({
+				status: true
+			});
+		}
+		case "default": {
+			return [];
+		}
+	}
 };
 
 /**

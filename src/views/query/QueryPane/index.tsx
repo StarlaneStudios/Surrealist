@@ -168,6 +168,7 @@ export function QueryPane({
 			<CodeEditor
 				value={activeTab.query}
 				onChange={scheduleSetQuery}
+				userKeymap
 				extensions={[
 					surrealql(),
 					surqlLinting(),

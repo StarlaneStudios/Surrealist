@@ -1,8 +1,9 @@
-import { Checkbox, Kbd } from "@mantine/core";
+import { Checkbox, Kbd, Select } from "@mantine/core";
 import { adapter, isDesktop } from "~/adapter";
 import { useCheckbox } from "~/hooks/events";
 import { SettingsSection } from "../utilities";
 import { useSetting } from "~/hooks/config";
+import { EDITOR_KEYMAPS } from "~/constants";
 
 const CAT = "behavior";
 
@@ -13,6 +14,7 @@ export function BehaviourTab() {
 	const [queryErrorChecker, setQueryErrorChecker] = useSetting(CAT, "queryErrorChecker");
 	const [windowPinned, setWindowPinned] = useSetting(CAT, "windowPinned");
 	const [autoConnect, setAutoConnect] = useSetting(CAT, "autoConnect");
+	const [editorKeymap, setEditorKeymap] = useSetting(CAT, "editorKeymap");
 
 	const updateUpdateChecker = useCheckbox(setUpdateChecker);
 	const updateTableSuggest = useCheckbox(setTableSuggest);
@@ -64,6 +66,13 @@ export function BehaviourTab() {
 					label="Validate query for errors"
 					checked={queryErrorChecker}
 					onChange={updateQueryErrorChecker}
+				/>
+
+				<Select
+					label="Editor keymap"
+					data={EDITOR_KEYMAPS}
+					value={editorKeymap}
+					onChange={setEditorKeymap as any}
 				/>
 
 			</SettingsSection>

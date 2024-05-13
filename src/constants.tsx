@@ -14,6 +14,7 @@ import {
 	ViewInfo,
 	ViewMode,
 	Orientation,
+	EditorKeymap,
 } from "./types";
 
 import {
@@ -207,4 +208,9 @@ export const SURQL_FILTERS = [
 export const ORIENTATIONS: Selectable<Orientation>[] = [
 	{ label: "Horizontal", value: "horizontal" },
 	{ label: "Vertical", value: "vertical" },
+];
+
+export const EDITOR_KEYMAPS: Selectable<EditorKeymap>[] = [
+	{ label: "Default", value: "default" },
+	{ label: "Vim", value: "vim" },
 ];

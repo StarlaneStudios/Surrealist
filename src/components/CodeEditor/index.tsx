@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useSetting } from "~/hooks/config";
 import { Compartment, EditorState, Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
-import { editorBase } from "~/util/editor/extensions";
+import { editorBase, userEditorKeymap } from "~/util/editor/extensions";
 import { forceLinting } from "@codemirror/lint";
 
 interface EditorRef {
@@ -18,6 +18,7 @@ export interface CodeEditorProps extends BoxProps {
 	extensions?: Extension[];
 	readOnly?: boolean;
 	autoFocus?: boolean;
+	userKeymap?: boolean;
 	onMount?: (editor: EditorView) => void;
 	onChange?: (value: string) => void;
 }
@@ -29,6 +30,7 @@ export function CodeEditor(props: CodeEditorProps) {
 		extensions,
 		className,
 		readOnly,
+		userKeymap,
 		autoFocus,
 		onMount,
 		...rest
@@ -37,6 +39,7 @@ export function CodeEditor(props: CodeEditorProps) {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const editorRef = useRef<EditorRef>();
 	const [editorScale] = useSetting("appearance", "editorScale");
+	const [editorKeymap] = useSetting("behavior", "editorKeymap");
 
 	const textSize = Math.floor(15 * (editorScale / 100));
 
@@ -53,6 +56,9 @@ export function CodeEditor(props: CodeEditorProps) {
 		const initialState = EditorState.create({
 			doc: value,
 			extensions: [
+				userEditorKeymap(
+					!userKeymap || readOnly ? 'default': editorKeymap
+				),
 				editorBase(),
 				changeHandler,
 				editableExt,
@@ -83,7 +89,7 @@ export function CodeEditor(props: CodeEditorProps) {
 		return () => {
 			editor.destroy();
 		};
-	}, []);
+	}, [editorKeymap]);
 
 	useEffect(() => {
 		const { editor } = editorRef.current!;

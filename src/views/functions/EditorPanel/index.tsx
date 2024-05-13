@@ -85,6 +85,7 @@ export function EditorPanel({
 					onChange={value => onChange((draft: any) => {
 						draft.block = value;
 					})}
+					userKeymap
 					extensions={[
 						surrealql(),
 						surqlLinting(),

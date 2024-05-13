@@ -8,6 +8,7 @@ export type SourceMode = "schema" | "infer";
 export type DiagramMode = "fields" | "summary" | "simple";
 export type DiagramDirection = "ltr" | "rtl";
 export type ColorScheme = "light" | "dark";
+export type EditorKeymap = "vim" | "default";
 export type Platform = "darwin" | "windows" | "linux";
 export type TableType = "ANY" | "NORMAL" | "RELATION";
 export type ValueMode = "json" | "sql";
@@ -89,6 +90,7 @@ export interface SurrealistBehaviorSettings {
 	windowPinned: boolean;
 	autoConnect: boolean;
 	docsLanguage: CodeLang;
+	editorKeymap: EditorKeymap;
 }
 
 export interface SurrealistAppearanceSettings {
