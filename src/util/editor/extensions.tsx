@@ -15,6 +15,7 @@ import { useDatabaseStore } from "~/stores/database";
 import { getActiveQuery } from "../connection";
 import { tryParseParams } from "../helpers";
 import { validateQuery } from "../surrealql";
+import { vscodeKeymap } from "@replit/codemirror-vscode-keymap";
 
 /**
  * The color scheme used within editors
@@ -55,6 +56,7 @@ export const editorBase = (): Extension => [
 		highlightWordAroundCursor: true,
 		wholeWords: true
 	}),
+	keymap.of(vscodeKeymap),
 	keymap.of([
 		runQuery,
 		acceptWithTab,

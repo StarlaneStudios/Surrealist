@@ -24,6 +24,7 @@ export type InterfaceStore = {
 	showScopeSignup: boolean;
 	showChangelogAlert: boolean;
 	hasReadChangelog: boolean;
+	hasEditorFocus: boolean;
 
 	setWindowTitle: (title: string) => void;
 	setColorPreference: (preference: ColorScheme) => void;
@@ -42,6 +43,7 @@ export type InterfaceStore = {
 	closeScopeSignup: () => void;
 	showChangelog: () => void;
 	readChangelog: () => void;
+	setHasEditorFocus: (hasFocus: boolean) => void;
 };
 
 export const useInterfaceStore = create<InterfaceStore>((set) => ({
@@ -59,6 +61,7 @@ export const useInterfaceStore = create<InterfaceStore>((set) => ({
 	showScopeSignup: false,
 	showChangelogAlert: false,
 	hasReadChangelog: false,
+	hasEditorFocus: false,
 
 	setWindowTitle: (title) => set(() => ({ title })),
 
@@ -153,4 +156,7 @@ export const useInterfaceStore = create<InterfaceStore>((set) => ({
 		hasReadChangelog: true,
 	})),
 
+	setHasEditorFocus: (hasFocus) => set(() => ({
+		hasEditorFocus: hasFocus,
+	})),
 }));

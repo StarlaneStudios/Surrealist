@@ -33,7 +33,6 @@ import { Sidebar } from "../Sidebar";
 import { CommandPaletteModal } from "./modals/palette";
 import { useBoolean } from "~/hooks/boolean";
 import { useWindowSettings } from "./hooks";
-import { useCompatHotkeys } from "~/hooks/hotkey";
 import { FunctionsView } from "~/views/functions/FunctionsView";
 import { ModelsView } from "~/views/models/ModelsView";
 import { LegacyModal } from "./modals/legacy";
@@ -44,6 +43,8 @@ import { Icon } from "../Icon";
 import { iconOpen } from "~/util/icons";
 import { isMobile } from "~/util/helpers";
 import { EmbedderModal } from "./modals/embedder";
+import { useCompatHotkeys } from "~/hooks/hotkey";
+import { useCallback } from "react";
 
 const PORTAL_ATTRS = {
 	attributes: {
@@ -65,6 +66,7 @@ export function Scaffold() {
 	const isLight = useIsLight();
 
 	const title = useInterfaceStore((s) => s.title);
+	const hasEditorFocus = useInterfaceStore((s) => s.hasEditorFocus);
 	const activeConnection = useConfigStore((s) => s.activeConnection);
 	const activeView = useConfigStore((s) => s.activeView);
 
@@ -74,9 +76,11 @@ export function Scaffold() {
 
 	const viewNode = VIEW_PORTALS[activeView];
 
+	const noop = useCallback(() => {}, []);
+
 	useWindowSettings();
 	useCompatHotkeys([
-		["mod+K", paletteHandle.open]
+		["mod+K", hasEditorFocus ? noop : paletteHandle.open]
 	]);
 
 	return (

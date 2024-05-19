@@ -17,5 +17,5 @@ export function useCompatHotkeys(hotkeys: HotkeyItem[]) {
 		return () => {
 			document.body.removeEventListener('keydown', handler);
 		};
-	}, []);
+	}, [hotkeys]);
 }

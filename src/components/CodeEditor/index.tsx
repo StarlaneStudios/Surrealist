@@ -7,6 +7,7 @@ import { Compartment, EditorState, Extension } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 import { editorBase } from "~/util/editor/extensions";
 import { forceLinting } from "@codemirror/lint";
+import { useInterfaceStore } from "~/stores/interface";
 
 interface EditorRef {
 	editor: EditorView;
@@ -37,6 +38,8 @@ export function CodeEditor(props: CodeEditorProps) {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const editorRef = useRef<EditorRef>();
 	const [editorScale] = useSetting("appearance", "editorScale");
+
+	const setHasEditorFocus = useInterfaceStore((s) => s.setHasEditorFocus);
 
 	const textSize = Math.floor(15 * (editorScale / 100));
 
@@ -71,6 +74,16 @@ export function CodeEditor(props: CodeEditorProps) {
 			editable
 		};
 
+		const handleFocus =  () => {
+			setHasEditorFocus(true);
+		};
+		const handleBlur = () => {
+			setHasEditorFocus(false);
+		};
+
+		editor.contentDOM.addEventListener("focus", handleFocus);
+		editor.contentDOM.addEventListener("blur", handleBlur);
+
 		if (autoFocus) {
 			const timer = setInterval(() => {
 				editor.focus();
@@ -81,7 +94,10 @@ export function CodeEditor(props: CodeEditorProps) {
 		onMount?.(editor);
 
 		return () => {
+			editor.contentDOM.removeEventListener("focus", handleFocus);
+			editor.contentDOM.removeEventListener("blur", handleBlur);
 			editor.destroy();
+			setHasEditorFocus(false);
 		};
 	}, []);
 
