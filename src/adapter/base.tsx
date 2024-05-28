@@ -136,7 +136,7 @@ export interface SurrealistAdapter {
 	 * Log a message to the implemented logging system
 	 */
 	log(label: string, message: string): void;
-	
+
 	/**
 	 * Log a warning message to the implemented logging system
 	 */

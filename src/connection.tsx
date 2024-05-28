@@ -192,7 +192,7 @@ export async function authenticate(auth: AuthDetails, surreal?: Surreal) {
 export async function executeQuery(query: string, params?: any) {
 	try {
 		adapter.trace('DB', `Executing query: ${query}`);
-		
+
 		const responseRaw = await SURREAL.query_raw(query, params) || [];
 
 		return mapResults(responseRaw);

@@ -19,9 +19,12 @@ import { usePanelMinSize } from "~/hooks/panels";
 import { Introduction } from "~/components/Introduction";
 import { adapter } from "~/adapter";
 import { useIsConnected } from "~/hooks/connection";
+import { useShallow } from 'zustand/react/shallow';
 
 export function ExplorerView() {
-	const { openTableCreator } = useInterfaceStore.getState();
+	const { openTableCreator } = useInterfaceStore(
+		useShallow(state => ({ openTableCreator: state.openTableCreator }))
+	);
 
 	const [activeTable, setActiveTable] = useState<string>();
 	const [isCreating, isCreatingHandle] = useDisclosure();

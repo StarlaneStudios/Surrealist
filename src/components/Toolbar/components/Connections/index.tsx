@@ -18,10 +18,19 @@ import { useIntent } from "~/hooks/url";
 import { USER_ICONS } from "~/util/user-icons";
 import { openConnection } from "~/connection";
 import { useCompatHotkeys } from "~/hooks/hotkey";
+import { useShallow } from 'zustand/react/shallow';
 
 export function Connections() {
-	const { openConnectionCreator, openConnectionEditor} = useInterfaceStore.getState();
-	const { setActiveConnection, addConnection, removeConnection } = useConfigStore.getState();
+	const { openConnectionCreator, openConnectionEditor } = useInterfaceStore(
+		useShallow(state => ({ openConnectionCreator: state.openConnectionCreator, openConnectionEditor: state.openConnectionEditor }))
+	);
+	const { setActiveConnection, addConnection, removeConnection } = useConfigStore(
+		useShallow(state => ({
+			setActiveConnection: state.setActiveConnection,
+			addConnection: state.addConnection,
+			removeConnection: state.removeConnection,
+		}))
+	);
 	const { showContextMenu } = useContextMenu();
 
 	const [isListing, listingHandle] = useDisclosure();

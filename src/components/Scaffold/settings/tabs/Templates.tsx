@@ -25,7 +25,7 @@ const PLACEHOLDER: Connection = {
 	pinnedTables: [],
 	diagramMode: "fields",
 	diagramDirection: "ltr",
-	diagramShowLinks: false, 
+	diagramShowLinks: false,
 	queryHistory: []
 };
 

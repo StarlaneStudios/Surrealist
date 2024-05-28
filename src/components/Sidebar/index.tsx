@@ -19,6 +19,7 @@ import { useConnection } from "~/hooks/connection";
 import { useHover } from "@mantine/hooks";
 import { useBoolean } from "~/hooks/boolean";
 import { Shortcut } from "../Shortcut";
+import { useShallow } from 'zustand/react/shallow';
 
 const NAVIGATION: ViewMode[][] = [
 	[
@@ -49,7 +50,9 @@ export function Sidebar({
 	onTogglePalette,
 	onToggleSettings,
 }: SidebarProps) {
-	const { setActiveView } = useConfigStore.getState();
+	const { setActiveView } = useConfigStore(
+		useShallow(state => ({ setActiveView: state.setActiveView }))
+	);
 
 	const [flags] = useFeatureFlags();
 	const [expanded, expandedHandle] = useBoolean();

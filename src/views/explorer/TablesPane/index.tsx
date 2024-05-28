@@ -21,6 +21,7 @@ import { useInterfaceStore } from "~/stores/interface";
 import { useConfirmation } from "~/providers/Confirmation";
 import { tb } from "~/util/helpers";
 import { executeQuery } from "~/connection";
+import { useShallow } from 'zustand/react/shallow';
 
 export interface TablesPaneProps {
 	activeTable: string | undefined;
@@ -29,7 +30,9 @@ export interface TablesPaneProps {
 }
 
 export function TablesPane({ activeTable, onTableSelect, onCreateRecord }: TablesPaneProps) {
-	const { openTableCreator } = useInterfaceStore.getState();
+	const { openTableCreator } = useInterfaceStore(
+		useShallow(state => ({ openTableCreator: state.openTableCreator }))
+	);
 
 	const toggleTablePin = useConfigStore((s) => s.toggleTablePin);
 	const isLight = useIsLight();

@@ -35,12 +35,17 @@ import { useSetting } from "~/hooks/config";
 import { useCompatHotkeys } from "~/hooks/hotkey";
 import { usePanelMinSize } from "~/hooks/panels";
 import { useInterfaceStore } from "~/stores/interface";
+import { useShallow } from 'zustand/react/shallow';
 
 const switchPortal = createHtmlPortalNode();
 
 export function QueryView() {
-	const { setShowQueryVariables, toggleQueryVariables } = useInterfaceStore.getState();
-	const { saveQuery } = useConfigStore.getState();
+	const { setShowQueryVariables, toggleQueryVariables } = useInterfaceStore(
+		useShallow(state => ({ setShowQueryVariables: state.setShowQueryVariables, toggleQueryVariables: state.toggleQueryVariables }))
+	);
+	const { saveQuery } = useConfigStore(
+		useShallow(state => ({ saveQuery: state.saveQuery }))
+	);
 	const isLight = useIsLight();
 
 	const [orientation] = useSetting("appearance", "queryOrientation");

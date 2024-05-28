@@ -10,9 +10,12 @@ import { useActiveConnection } from "~/hooks/connection";
 import { useStable } from "~/hooks/stable";
 import { useInterfaceStore } from "~/stores/interface";
 import { iconWarning } from "~/util/icons";
+import { useShallow } from 'zustand/react/shallow';
 
 export function ScopeSignup() {
-	const { closeScopeSignup, openConnectionEditor } = useInterfaceStore.getState();
+	const { closeScopeSignup, openConnectionEditor } = useInterfaceStore(
+		useShallow(state => ({ closeScopeSignup: state.closeScopeSignup, openConnectionEditor: state.openConnectionEditor }))
+	);
 
 	const opened = useInterfaceStore((s) => s.showScopeSignup);
 	const [loading, loadingHandle] = useDisclosure();

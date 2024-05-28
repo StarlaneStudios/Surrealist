@@ -17,7 +17,6 @@ import { getCurrent } from "@tauri-apps/api/window";
 import { getCurrent as getWebView } from "@tauri-apps/api/webview";
 import { handleIntentRequest } from "~/util/intents";
 import { VIEW_MODES } from "~/constants";
-import { throttle } from "radash";
 
 const WAIT_DURATION = 1000;
 

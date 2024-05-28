@@ -11,10 +11,15 @@ import { useStable } from "~/hooks/stable";
 import { SANDBOX } from "~/constants";
 import { adapter } from "~/adapter";
 import { useDatabaseStore } from "~/stores/database";
+import { useShallow } from 'zustand/react/shallow';
 
 export function StartScreen() {
-	const { setActiveConnection } = useConfigStore.getState();
-	const { openConnectionCreator } = useInterfaceStore.getState();
+	const { setActiveConnection } = useConfigStore(
+		useShallow(state => ({ setActiveConnection: state.setActiveConnection }))
+	);
+	const { openConnectionCreator } = useInterfaceStore(
+		useShallow(state => ({ openConnectionCreator: state.openConnectionCreator }))
+	);
 	const { isConnecting } = useDatabaseStore();
 
 	const openSandbox = useStable(() => {

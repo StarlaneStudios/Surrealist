@@ -1,7 +1,7 @@
 {
 	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"plugins": ["@typescript-eslint", "unused-imports", "unicorn"],
+	"plugins": ["@typescript-eslint", "unused-imports", "unicorn", "eslint-plugin-react-compiler"],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
@@ -13,8 +13,6 @@
 	"rules": {
 		"semi": 2,
 		"indent": 0,
-		"unused-imports/no-unused-imports": 1,
-		"no-constant-condition": [2, { "checkLoops": false }],
 		"@typescript-eslint/explicit-member-accessibility": 1,
 		"@typescript-eslint/explicit-module-boundary-types": 0,
 		"@typescript-eslint/no-explicit-any": 0,
@@ -25,6 +23,9 @@
 		"@typescript-eslint/indent": [2, "tab", { "SwitchCase": 1 }],
 		"@typescript-eslint/ban-types": 0,
 		"@typescript-eslint/ban-ts-comment": 0,
+		"no-constant-condition": [2, { "checkLoops": false }],
+		"no-trailing-spaces": 1,
+		"react-compiler/react-compiler": "error",
 		"unicorn/prevent-abbreviations": 0,
 		"unicorn/catch-error-name": [2, { "name": "err" }],
 		"unicorn/no-null": 0,
@@ -35,7 +36,7 @@
 		"unicorn/no-thenable": 0,
 		"unicorn/prefer-top-level-await": 0,
 		"unicorn/no-useless-undefined": 0,
-		"no-trailing-spaces": 1
+		"unused-imports/no-unused-imports": 1
 	},
 	"parserOptions": {
 		"warnOnUnsupportedTypeScriptVersion": false

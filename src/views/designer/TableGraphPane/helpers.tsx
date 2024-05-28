@@ -158,11 +158,11 @@ export function buildFlowNodes(
 							labelShowBg: false,
 							labelStyle: { fill: 'white' },
 							data: { linkCount: 1 }
-						}
-						
+						};
+
 						linkIndex.set(`${table.schema.name}:${target}`, edge);
 						linkIndex.set(`${target}:${table.schema.name}`, edge);
-						
+
 						edges.push(edge);
 					}
 				}

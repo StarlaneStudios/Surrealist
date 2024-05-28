@@ -23,12 +23,17 @@ import {
 	QueryClient,
 	QueryClientProvider,
 } from '@tanstack/react-query';
+import { useShallow } from 'zustand/react/shallow';
 
 const queryClient = new QueryClient();
 
 export function App() {
-	const { hideAvailableUpdate } = useInterfaceStore.getState();
-	const { setActiveConnection } = useConfigStore.getState();
+	const { setActiveConnection } = useConfigStore(
+		useShallow(state => ({ setActiveConnection: state.setActiveConnection }))
+	);
+	const { hideAvailableUpdate } = useInterfaceStore(
+		useShallow(state => ({ hideAvailableUpdate: state.hideAvailableUpdate }))
+	);
 
 	const isLight = useIsLight();
 	const colorScheme = useColorScheme();

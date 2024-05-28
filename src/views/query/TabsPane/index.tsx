@@ -17,6 +17,7 @@ import { TabQuery } from "~/types";
 import { Sortable } from "~/components/Sortable";
 import { useIntent } from "~/hooks/url";
 import { cancelLiveQueries } from "~/connection";
+import { useShallow } from 'zustand/react/shallow';
 
 export interface TabsPaneProps {
 	openHistory: () => void;
@@ -24,7 +25,15 @@ export interface TabsPaneProps {
 }
 
 export function TabsPane(props: TabsPaneProps) {
-	const { updateCurrentConnection, addQueryTab, removeQueryTab, updateQueryTab, setActiveQueryTab } = useConfigStore.getState();
+	const { updateCurrentConnection, addQueryTab, removeQueryTab, updateQueryTab, setActiveQueryTab } = useConfigStore(
+		useShallow(state => ({
+			updateCurrentConnection: state.updateCurrentConnection,
+			addQueryTab: state.addQueryTab,
+			removeQueryTab: state.removeQueryTab,
+			updateQueryTab: state.updateQueryTab,
+			setActiveQueryTab: state.setActiveQueryTab,
+		}))
+	);
 	const { queries, activeQuery } = useActiveConnection();
 	const { showContextMenu } = useContextMenu();
 	const liveTabs = useInterfaceStore((s) => s.liveTabs);

@@ -86,7 +86,7 @@ export function DesignDrawer({ opened, value, onChange, handle, onClose }: Schem
 				maxSize={900}
 				onResize={setWidth}
 			/>
-			
+
 			<Group mb="md" gap="sm">
 				<ModalTitle>
 					<Icon path={iconWrench} left size="sm" />
