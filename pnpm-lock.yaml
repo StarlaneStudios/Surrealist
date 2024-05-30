@@ -120,8 +120,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1(@lezer/common@1.2.1)
       codemirror-indent-wrapped-line:
-        specifier: ^1.0.0
-        version: 1.0.0(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.26.3)
+        specifier: ^1.0.1
+        version: 1.0.1(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.26.3)
       codemirror-surrealql:
         specifier: workspace:codemirror-surrealql
         version: link:packages/codemirror-surrealql
@@ -2732,8 +2732,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /codemirror-indent-wrapped-line@1.0.0(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.26.3):
-    resolution: {integrity: sha512-23B7Fil+oTm/6HMNVr7S+oqtKxUMRK2/8fPt8C2YoSdDGKLZ3VZ/AntFDwqemRNRSB0YOxM5bIIWLLJY+x1t2Q==}
+  /codemirror-indent-wrapped-line@1.0.1(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.26.3):
+    resolution: {integrity: sha512-HepAVDvv+OS4M+jvdm6aO1HEgxlHqYmZm6iirinEFOKkTZLedmaAXAW6787U0VZrtEXI5Im8/8+isf8aJ3qnnQ==}
     peerDependencies:
       '@codemirror/language': ^6.10.1
       '@codemirror/state': ^6.4.1
