@@ -195,6 +195,7 @@ export function PermissionInput({
 			value={textValue}
 			onChange={handleChange}
 			rightSectionWidth={70}
+			extensions={[surrealql('permission')]}
 			rightSection={
 				<Group gap="xs">
 					<Tooltip label="Grant full access">

@@ -25,11 +25,17 @@ const surrealqlLanguage = /*@__PURE__*/LRLanguage.define({
         commentTokens: { line: "--" },
     }
 });
+const defaultLanguage = /*@__PURE__*/surrealqlLanguage.configure({
+    top: 'SurrealQL'
+});
+const permissionInputLanguage = /*@__PURE__*/surrealqlLanguage.configure({
+    top: 'PermissionInput'
+});
 /**
  * The CodeMirror extension used to add support for the SurrealQL language
  */
-function surrealql() {
-    return new LanguageSupport(surrealqlLanguage);
+function surrealql(scope = 'default') {
+    return new LanguageSupport(scope === 'permission' ? permissionInputLanguage : defaultLanguage);
 }
 
 export { surrealql, surrealqlLanguage };

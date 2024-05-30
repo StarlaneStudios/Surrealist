@@ -148,21 +148,21 @@ export function buildFlowNodes(
 						existing.data.linkCount++;
 						existing.label = `${existing.data.linkCount} links`;
 					} else {
-						const edge = {
+						const edge: Edge = {
 							...EDGE_OPTIONS,
 							id: `tb-${table.schema.name}-field-${field.name}:${target}`,
 							source: table.schema.name,
 							target,
 							className: classes.recordLink,
 							label: field.name,
-							labelShowBg: false,
+							labelBgStyle: { fill: 'var(--mantine-color-slate-8' },
 							labelStyle: { fill: 'white' },
 							data: { linkCount: 1 }
-						}
-						
+						};
+
 						linkIndex.set(`${table.schema.name}:${target}`, edge);
 						linkIndex.set(`${target}:${table.schema.name}`, edge);
-						
+
 						edges.push(edge);
 					}
 				}

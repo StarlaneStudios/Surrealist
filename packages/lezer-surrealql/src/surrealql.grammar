@@ -2,6 +2,10 @@
 	expressions | WhereClause
 }
 
+@top PermissionInput {
+	WhereClause | none | full
+}
+
 @precedence {
 	range @left
 	method

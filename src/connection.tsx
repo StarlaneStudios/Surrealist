@@ -13,6 +13,7 @@ import { objectify, sleep } from "radash";
 import { getLiveQueries } from "./util/surrealql";
 import { Value } from "surrealql.wasm/v1";
 import { adapter } from "./adapter";
+import { getSetting } from "./util/config";
 
 export interface ConnectOptions {
 	connection?: ConnectionOptions;
@@ -22,7 +23,7 @@ export interface UserQueryOptions {
 	override?: string;
 }
 
-let iter = 0;
+let openCounter = 0;
 const LQ_SUPPORTED = new Set<Protocol>(['ws', 'wss', 'mem', 'indxdb']);
 const LIVE_QUERIES = new Map<string, Set<UUID>>();
 const SURREAL = createSurreal();
@@ -44,8 +45,9 @@ SURREAL.emitter.subscribe("disconnected", () => {
  * @param options Connection options
  */
 export async function openConnection(options?: ConnectOptions) {
-	iter++;
-	const iterSelf = iter;
+	openCounter++;
+
+	const thisOpenCounter = openCounter;
 	const currentConnection = getConnection();
 	const connection = options?.connection || currentConnection?.connection;
 
@@ -54,7 +56,7 @@ export async function openConnection(options?: ConnectOptions) {
 	}
 
 	const { setIsConnected, setIsConnecting, setVersion } = useDatabaseStore.getState();
-	const { settings: { behavior: { versionCheckTimeout } } } = useConfigStore.getState();
+	const versionCheckTimeout = getSetting("behavior", "versionCheckTimeout") ?? 5;
 	const rpcEndpoint = connectionUri(connection);
 
 	await closeConnection();
@@ -67,69 +69,67 @@ export async function openConnection(options?: ConnectOptions) {
 	const isSignup = connection.authMode === "scope-signup";
 	const auth = composeAuthentication(connection);
 
-	await SURREAL.connect(rpcEndpoint, {
-		versionCheckTimeout: (versionCheckTimeout ?? 5) * 1000,
-		namespace: connection.namespace,
-		database: connection.database,
-		prepare: async (surreal) => {
-			try {
-				if (isSignup) {
-					await register(buildScopeAuth(connection), surreal);
-				} else {
-					await authenticate(auth, surreal);
+	try {
+		await SURREAL.connect(rpcEndpoint, {
+			versionCheckTimeout: versionCheckTimeout * 1000,
+			namespace: connection.namespace,
+			database: connection.database,
+			prepare: async (surreal) => {
+				try {
+					if (isSignup) {
+						await register(buildScopeAuth(connection), surreal);
+					} else {
+						await authenticate(auth, surreal);
+					}
+				} catch {
+					throw new Error("Authentication failed");
 				}
-			} catch {
-				throw new Error("Authentication failed");
-			}
-		},
-	})
-		.then(() => {
-			if (iter == iterSelf) {
-				setIsConnecting(false);
-				setIsConnected(true);
-				syncDatabaseSchema();
-
-				ConnectedEvent.dispatch(null);
-
-				posthog.capture('connection_open', {
-					protocol: connection.protocol
-				});
-
-				adapter.log('DB', "Connection established");
-			}
-		})
-		.catch((err) => {
-			if (iter == iterSelf) {
-				SURREAL.close();
-
-				setIsConnecting(false);
-				setIsConnected(false);
-
-				if (err instanceof VersionRetrievalFailure)
-					return showWarning({
-						title: "Failed to query version",
-						subtitle: "The database version could not be determined. Please ensure the database is running and accessible by Surrealist."
-					});
-
-				if (err instanceof UnsupportedVersion)
-					showError({
-						title: "Unsupported version",
-						subtitle: `The database version must be in range "${err.supportedRange}". The current version is ${err.version}`
-					});
-
-				showError({
-					title: "Failed to connect",
-					subtitle: err.message
-				});
-			}
-		}).finally(() => {
-			if (iter == iterSelf) {
-				SURREAL.version().then((v) => {
-					setVersion(v);
-					adapter.log('DB', `Database version ${v ?? "unknown"}`);
-				});
-			}
+			},
 		});
+
+		if (openCounter == thisOpenCounter) {
+			setIsConnecting(false);
+			setIsConnected(true);
+			syncDatabaseSchema();
+
+			ConnectedEvent.dispatch(null);
+
+			posthog.capture('connection_open', {
+				protocol: connection.protocol
+			});
+
+			adapter.log('DB', "Connection established");
+
+			SURREAL.version().then((v) => {
+				setVersion(v);
+				adapter.log('DB', `Database version ${v ?? "unknown"}`);
+			});
+		}
+	} catch(err: any) {
+		if (openCounter == thisOpenCounter) {
+			SURREAL.close();
+
+			setIsConnecting(false);
+			setIsConnected(false);
+
+			if (err instanceof VersionRetrievalFailure)
+				return showWarning({
+					title: "Failed to query version",
+					subtitle: "The database version could not be determined. Please ensure the database is running and accessible by Surrealist."
+				});
+
+			if (err instanceof UnsupportedVersion)
+				showError({
+					title: "Unsupported version",
+					subtitle: `The database version must be in range "${err.supportedRange}". The current version is ${err.version}`
+				});
+
+			showError({
+				title: "Failed to connect",
+				subtitle: err.message
+			});
+		}
+	}
 }
 
 /**
@@ -192,7 +192,7 @@ export async function authenticate(auth: AuthDetails, surreal?: Surreal) {
 export async function executeQuery(query: string, params?: any) {
 	try {
 		adapter.trace('DB', `Executing query: ${query}`);
-		
+
 		const responseRaw = await SURREAL.query_raw(query, params) || [];
 
 		return mapResults(responseRaw);

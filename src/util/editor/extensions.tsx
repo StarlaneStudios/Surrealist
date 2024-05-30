@@ -3,7 +3,7 @@ import { surrealqlLanguage } from "codemirror-surrealql";
 import { getSetting } from "../config";
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
-import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap, CompletionSource } from "@codemirror/autocomplete";
+import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap, CompletionSource, snippetCompletion } from "@codemirror/autocomplete";
 import { keymap, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, lineNumbers, highlightActiveLineGutter, EditorView } from "@codemirror/view";
 import { syntaxHighlighting, indentOnInput, bracketMatching, foldGutter, foldKeymap, codeFolding, indentUnit } from "@codemirror/language";
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
@@ -191,7 +191,7 @@ export const surqlVariableCompletion = (): Extension => {
 const CUSTOM_FUNCTION_SOURCE: CompletionSource = (context) => {
 	const match = context.matchBefore(/fn::\w*/i);
 	const functions = useDatabaseStore.getState().databaseSchema?.functions || [];
-	const names = functions.map(fn => `fn::` + fn.name);
+	const names = functions.map(fn => `fn::${fn.name}`);
 
 	if (!match) {
 		return null;
@@ -200,9 +200,9 @@ const CUSTOM_FUNCTION_SOURCE: CompletionSource = (context) => {
 	return {
 		from: match.from,
 		validFor: /\w+$/,
-		options: names.map(fn => ({
-			label: fn,
-			type: "function"
+		options: names.map(label => snippetCompletion(`${label}(#{1})`, {
+			label,
+			type: 'function'
 		}))
 	};
 };
