@@ -10,6 +10,7 @@ import { useIsLight } from "~/hooks/theme";
 import { colorTheme } from "~/util/editor/extensions";
 import { Icon } from "../Icon";
 import { iconCheck, iconCopy } from "~/util/icons";
+import { indentWrappedLines } from "codemirror-indent-wrapped-line";
 
 interface EditorRef {
 	editor: EditorView;
@@ -53,7 +54,7 @@ export function CodePreview({
 				configExt,
 				colorTheme(),
 				EditorState.readOnly.of(true),
-				EditorView.lineWrapping,
+				indentWrappedLines(),
 			]
 		});
 
