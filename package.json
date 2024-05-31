@@ -58,6 +58,7 @@
 		"ansi-to-html": "^0.7.2",
 		"clsx": "^2.1.0",
 		"codemirror": "^6.0.1",
+		"codemirror-indent-wrapped-line": "^1.0.1",
 		"codemirror-surrealql": "workspace:codemirror-surrealql",
 		"dagre": "^0.8.5",
 		"dayjs": "^1.11.9",

@@ -15,6 +15,7 @@ import { useDatabaseStore } from "~/stores/database";
 import { getActiveQuery } from "../connection";
 import { tryParseParams } from "../helpers";
 import { validateQuery } from "../surrealql";
+import { indentWrappedLines } from 'codemirror-indent-wrapped-line';
 
 /**
  * The color scheme used within editors
@@ -68,7 +69,7 @@ export const editorBase = (): Extension => [
 	]),
 	indentUnit.of("    "),
 	EditorState.allowMultipleSelections.of(true),
-	EditorView.lineWrapping,
+	indentWrappedLines(),
 ];
 
 /**
@@ -87,7 +88,7 @@ export const inputBase = (): Extension => [
 		...historyKeymap,
 	]),
 	indentUnit.of("    "),
-	EditorView.lineWrapping,
+	indentWrappedLines(),
 ];
 
 /**
