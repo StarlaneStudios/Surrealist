@@ -9,6 +9,7 @@
 	],
 	"scripts": {
 		"build": "tsc && pnpm grammar:build && vite build",
+		"build:embedded": "tsc && pnpm grammar:build && vite build -c vite.config.embedded.ts",
 		"dev": "vite",
 		"grammar:build": "cd packages/lezer-surrealql && pnpm build && cd ../codemirror-surrealql && pnpm build",
 		"lint": "eslint .",
@@ -113,6 +114,7 @@
 		"svgo": "^3.3.2",
 		"typescript": "^5.1.6",
 		"vite": "^5.2.9",
+		"vite-plugin-compression2": "^1.1.1",
 		"vite-plugin-image-optimizer": "^1.1.8"
 	}
 }
