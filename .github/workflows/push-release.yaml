@@ -113,3 +113,33 @@ jobs:
             aws-secret-access-key: ${{ secrets.AMAZON_SECRET_KEY }}
         - name: Distribute across regions
           run: aws s3 sync --delete --exact-timestamp --source-region eu-west-2 --region ${{ matrix.region }} s3://www.surrealist.app s3://www.${{ matrix.region }}.surrealist.app
+
+    publish_aur_package:
+          name: Publish to AUR package
+          if: ${{ !github.event.release.prerelease }}
+          needs:
+            - version
+
+          runs-on: 'ubuntu-latest'
+          steps:
+            - name: Information
+              run: echo "Publishing surrealist-bin version ${{ needs.version.outputs.version }}"
+
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Generate PKGBUILD
+              run: python ci/generate-pkgbuild.py
+              env:
+                PKGVER: ${{ needs.version.outputs.version }}
+                PKGREL: 1
+
+            - name: Publish surrealist-bin to the AUR
+              uses: KSXGitHub/github-actions-deploy-aur@v2.7.1
+              with:
+                pkgname: surrealist-bin
+                pkgbuild: PKGBUILD
+                commit_username: GitHub Actions
+                commit_email: action@github.com
+                ssh_private_key: ${{ secrets.AUR_PRIVATE_KEY }}
+                commit_message: ${{ needs.version.outputs.version }}
