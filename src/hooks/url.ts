@@ -7,6 +7,7 @@ import { ViewMode } from "~/types";
 import { IntentEvent } from "~/util/global-events";
 import { useEventSubscription } from "./event";
 import { IntentPayload, IntentType, getIntentView, handleIntentRequest } from "~/util/intents";
+import { updateTitle } from "~/util/helpers";
 
 /**
  * Sync the active view to the URL and handle incoming intents
@@ -46,6 +47,7 @@ export function useUrlHandler() {
 			history.pushState(null, document.title, `/${activeView}`);
 			posthog.capture('$pageview');
 		}
+		updateTitle();
 	}, [activeView]);
 }
 

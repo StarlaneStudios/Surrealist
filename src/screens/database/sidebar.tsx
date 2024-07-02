@@ -8,7 +8,6 @@ import { useStable } from "~/hooks/stable";
 import { useConfigStore } from "~/stores/config";
 import { ViewMode } from "~/types";
 import { useFeatureFlags } from "~/util/feature-flags";
-import { updateTitle } from "~/util/helpers";
 import { useIsLight } from "~/hooks/theme";
 import { useConnection } from "~/hooks/connection";
 import { NavigationIcon } from "~/components/NavigationIcon";
@@ -49,7 +48,6 @@ export function DatabaseSidebar({
 	const activeView = useConfigStore((s) => s.activeView);
 
 	const setViewMode = useStable((id: ViewMode) => {
-		updateTitle();
 		setActiveView(id);
 		state.sidebarHandle.close();
 	});

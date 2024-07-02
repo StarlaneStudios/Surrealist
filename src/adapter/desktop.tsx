@@ -118,8 +118,8 @@ export class DesktopAdapter implements SurrealistAdapter {
 		"WebView": navigator.userAgent,
 	});
 
-	public async setWindowTitle(title: string) {
-		getCurrent().setTitle(title || "Surrealist");
+	public setWindowTitle(title: string) {
+		return getCurrent().setTitle(title || "Surrealist");
 	}
 
 	public async loadConfig() {
